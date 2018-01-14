@@ -73,6 +73,31 @@ public class PriorityResource {
         }
     }
 
+
+    @POST
+    @Path("sort")
+    public Response sortProducts(String[][] toSort) {
+
+        String[] sorted = new String[toSort.length];
+
+        for(int i=0; i < toSort.length; i++){
+            for(int j=1; j < (toSort.length-i); j++){
+                if(Database.comparePriorities(toSort[j][1], toSort[j-1][1]) < 0){
+                    String[] tmp = toSort[j-1];
+                    toSort[j-1] = toSort[j];
+                    toSort[j] = tmp;
+                }
+
+            }
+        }
+
+        for (int i = 0; i < toSort.length; i++) {
+            sorted[i] = toSort[i][0];
+        }
+
+        return Response.ok(sorted).build();
+    }
+
     @DELETE
     @Path("{id}")
     public Response deletePriority(@PathParam("id") String id) {
